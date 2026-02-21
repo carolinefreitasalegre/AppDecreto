@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace App.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     [ApiController]
     public class DecretoController : ControllerBase
     {
@@ -46,7 +46,7 @@ namespace App.Api.Controllers
         [HttpPut("atualizar-decreto/{id}")]
         public async Task<ActionResult<DecretosDto>> EditarDecreto(AtualizarDecretoDto dto, int id)
         {
-            var decretoEditado = await _service.EditarDecreto(dto, id);
+            var decretoEditado = await _service.EditarDecreto(dto);
             return Created("", decretoEditado);
         }
 

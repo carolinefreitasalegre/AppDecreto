@@ -3,6 +3,7 @@ using App.Application.Interfaces.Repository;
 using App.Application.Mappers;
 using App.Domain;
 using App.Domain.Exceptions;
+using FluentValidation;
 
 namespace App.Application.Services;
 
@@ -11,11 +12,15 @@ public class UsuarioService : IUsuarioService
 {
     private readonly IUsuarioRepository _repository;
     private readonly IHashSenhaService _hashService;
+    private readonly IValidator<CriarUsuarioDto> _validatorCriacaoUser;
+    private readonly IValidator<AtualizarUsuarioDto> _validatorEdicaoUser;
 
-    public UsuarioService(IUsuarioRepository repository, IHashSenhaService hashService)
+    public UsuarioService(IUsuarioRepository repository, IHashSenhaService hashService, IValidator<CriarUsuarioDto> validatorCriacaoUser,IValidator<AtualizarUsuarioDto> validatorEdicaoUser)
     {
         _repository = repository;
         _hashService = hashService;
+        _validatorCriacaoUser = validatorCriacaoUser;
+        _validatorEdicaoUser = validatorEdicaoUser;
     }
 
     public async Task<UsuariosDto> BuscarPorEmail(string email)
@@ -54,15 +59,10 @@ public class UsuarioService : IUsuarioService
 
     public async Task<UsuariosDto> CriarUsuario(CriarUsuarioDto dto)
     {
-        var usuarioExisteEmail = await _repository.BuscarViaEmail(dto.Email); 
-        var usuarioExisteMatricula = await _repository.BuscarViaMatricula(dto.Matricula) ;
-
-        if (usuarioExisteEmail != null)
-            throw new BusinessException("Email já registrado no banco de dados.");
-        
-        if(usuarioExisteMatricula != null)
-            throw new BusinessException("Matrícula já registrada no banco de dados.");
-
+        var validator = await _validatorCriacaoUser.ValidateAsync(dto);
+        if (!validator.IsValid)
+            throw new BusinessException(validator.Errors.First().ErrorMessage);
+     
         var senhaHash = _hashService.GerarHash(dto.Senha);
 
         var usuario = new Usuario(
@@ -82,13 +82,10 @@ public class UsuarioService : IUsuarioService
         if (usuario == null)
             throw new NotFoundException("Usuário não encontrado.");
 
-        if (usuario.Email != dto.Email)
-        {
-            var emailExiste = await _repository.BuscarViaEmail(dto.Email);
-            if (emailExiste != null)
-                throw new BusinessException("E-mail já cadastrado.");
-        }
-
+        var validator = await _validatorEdicaoUser.ValidateAsync(dto);
+        if (!validator.IsValid)
+            throw new BusinessException(validator.Errors.First().ErrorMessage);
+        
         usuario.AlterarNome(dto.Nome);
         usuario.AlterarEmail(dto.Email);
         usuario.AlterarRole(dto.Role);

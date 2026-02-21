@@ -6,5 +6,5 @@ public interface IDecretoService
     Task<DecretosDto>BuscarViaId(int id);
     Task<List<DecretosDto>>ListarDecretos();
     Task<DecretosDto> AdicionarDecretos(CriarDecretoDto decreto);
-    Task<DecretosDto> EditarDecreto(AtualizarDecretoDto decreto, int id);
+    Task<DecretosDto> EditarDecreto(AtualizarDecretoDto decreto);
 }

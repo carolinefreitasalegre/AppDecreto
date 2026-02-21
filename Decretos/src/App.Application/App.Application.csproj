@@ -8,15 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Validations\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\App.Domain\App.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+      <PackageReference Include="FluentValidation" Version="12.1.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.9" />
+      <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.3.9" />
     </ItemGroup>
 
 </Project>

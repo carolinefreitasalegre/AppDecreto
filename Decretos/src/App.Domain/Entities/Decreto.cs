@@ -6,12 +6,14 @@ namespace App.Domain;
 public class Decreto
 {
         public int Id { get; private set; }                        
-        public int NumeroDecreto { get; private set; }              
-        public string Solicitante { get; private set; } = null!;    
-        public DateTime DataSolicitacao { get; private set; }       
+        public int NumeroDecreto { get; private set; }           
+        public string Solicitante { get; private set; } = null!;
+        public DateTime DataSolicitacao { get; private set; } = DateTime.UtcNow;      
         public DateTime DataParaUso { get; private set; }           
         public Secretaria Secretaria { get; private set; }          
         public string Justificativa { get; private set; } = null!;  
+        
+        public Usuario Usuario { get; private set; } = null!;
         public int UsuarioId { get; private set; }
 
         public Decreto()

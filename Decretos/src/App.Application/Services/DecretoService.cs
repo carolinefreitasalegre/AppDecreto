@@ -3,16 +3,22 @@ using App.Application.Interfaces.Repository;
 using App.Application.Mappers;
 using App.Domain;
 using App.Domain.Exceptions;
+using FluentValidation;
 
 namespace App.Application.Services;
 
 public class DecretoService : IDecretoService
 {
     private readonly IDecretoRepository _repository;
+    private readonly IValidator<CriarDecretoDto> _validatorCriacaoDecreto;
+    private readonly IValidator<AtualizarDecretoDto> _validatorEdicaoDecreto;
 
-    public DecretoService(IDecretoRepository repository)
+
+    public DecretoService(IDecretoRepository repository, IValidator<CriarDecretoDto> validatorCriacaoDecreto, IValidator<AtualizarDecretoDto> validatorEdicaoDecreto)
     {
         _repository = repository;
+        _validatorCriacaoDecreto = validatorCriacaoDecreto;
+        _validatorEdicaoDecreto = validatorEdicaoDecreto;
     }
     
     public async Task<DecretosDto> BuscarViaNumero(int numero)
@@ -42,9 +48,10 @@ public class DecretoService : IDecretoService
 
     public async Task<DecretosDto> AdicionarDecretos(CriarDecretoDto dto)
     {
-        var verificarDecreto = await _repository.BuscarViaNumero(dto.NumeroDecreto);
-        if (verificarDecreto != null)
-            throw new BusinessException("Número de Decreto já consta no Banco de Dados.");
+        var validator = await _validatorCriacaoDecreto.ValidateAsync(dto);
+
+        if (!validator.IsValid)
+            throw new BusinessException(validator.Errors.First().ErrorMessage);
 
         var novoDecreto = new Decreto(
             dto.NumeroDecreto,
@@ -60,18 +67,22 @@ public class DecretoService : IDecretoService
         return DecretoMapper.ParaDecretosDto(novo);
     }
 
-    public async Task<DecretosDto> EditarDecreto(AtualizarDecretoDto decreto, int id)
+    public async Task<DecretosDto> EditarDecreto(AtualizarDecretoDto decreto)
     {
-        var buscarDecreto = await _repository.BuscarViaId(id);
+        var buscarDecreto = await _repository.BuscarViaId(decreto.Id);
         if (buscarDecreto == null)
             throw new NotFoundException("Decreto não encontrado.");
 
-        if (buscarDecreto.NumeroDecreto != decreto.NumeroDecreto)
-        {
-            var decretoJaExiste = await _repository.BuscarViaNumero(decreto.NumeroDecreto);
-            if (decretoJaExiste != null)
-                throw new BusinessException("Decreto já cadastrado.");
-        }
+        // if (buscarDecreto.NumeroDecreto != decreto.NumeroDecreto)
+        // {
+        //     var decretoJaExiste = await _repository.BuscarViaNumero(decreto.NumeroDecreto);
+        //     if (decretoJaExiste != null)
+        //         throw new BusinessException("Decreto já cadastrado.");
+        // }
+        var validator = await _validatorEdicaoDecreto.ValidateAsync(decreto);
+
+        if (!validator.IsValid)
+            throw new BusinessException(validator.Errors.First().ErrorMessage);
         
         buscarDecreto.AlterarNumero(decreto.NumeroDecreto);
         buscarDecreto.AlterarSolicitante(decreto.Solicitante);
@@ -79,7 +90,7 @@ public class DecretoService : IDecretoService
         buscarDecreto.AlterarSecretaria(decreto.Secretaria);
         buscarDecreto.AlterarJustificativa(decreto.Justificativa);
 
-        await _repository.EditarDecreto(buscarDecreto, id);
+        await _repository.EditarDecreto(buscarDecreto);
 
         return DecretoMapper.ParaDecretosDto(buscarDecreto);
     }

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using App.Domain.Enums;
 using App.Domain.Exceptions;
 
@@ -13,6 +14,8 @@ public class Usuario
     public UsuarioRole Role { get; private set; }   
     public UsuarioStatus Status { get; private set; } 
     public DateTime CriadoEm { get; private set; }
+    [JsonIgnore]
+    public ICollection<Decreto> Decretos { get; private set; } = new List<Decreto>();
 
     protected Usuario(){}
 

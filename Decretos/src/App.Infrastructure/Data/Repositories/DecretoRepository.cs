@@ -1,95 +1,55 @@
 using App.Application.Interfaces.Repository;
 using App.Domain;
+using App.Infrastructure.Data.DbConnection;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Infrastructure.Data.Repositories;
 
 public class DecretoRepository : IDecretoRepository
 {
-    private readonly DbConnectionFactory _connection;
+    private readonly AppDbContext _context;
 
-    public DecretoRepository(DbConnectionFactory connection)
+    public DecretoRepository(AppDbContext context)
     {
-        _connection = connection;
+        _context = context;
     }
     
-    public async Task<Decreto> BuscarViaNumero(int numero)
+    public async Task<Decreto?> BuscarViaNumero(int numero)
     {
-        var query = @"SELECT * FROM ""Decretos"" WHERE ""NumeroDecreto"" = @numero";
-
-        using (var connection = _connection.CreateConnection())
-        {
-            return await connection.QueryFirstOrDefaultAsync<Decreto>(query, new { numero });
-        }
+        return await _context.Decretos.FirstOrDefaultAsync(e => e.NumeroDecreto == numero);
     }
 
-    public async Task<Decreto> BuscarViaId(int id)
+    public async Task<int?> BuscarUltimoDecreto()
     {
-        var query = @"SELECT * FROM ""Decretos"" WHERE ""Id"" = @id";
+        return await _context.Decretos.OrderByDescending(d => d.NumeroDecreto)
+            .Select(d => d.NumeroDecreto).FirstOrDefaultAsync();
+    }
 
-        using (var connection = _connection.CreateConnection())
-        {
-            return await connection.QueryFirstOrDefaultAsync<Decreto>(query, new { id });
-        }
+    public async Task<Decreto?> BuscarViaId(int id)
+    {
+        return await _context.Decretos.FirstOrDefaultAsync(e => e.Id == id);
     }
 
     public async Task<List<Decreto>> ListarDecretos()
     {
-        var query = @"SELECT * FROM ""Decretos""";
-        
-
-        using (var connection = _connection.CreateConnection())
-        {
-            var usuarios = await connection.QueryAsync<Decreto>(query);
-            return usuarios.ToList();
-        }
+        return await _context.Decretos
+            .Include(d => d.Usuario).ToListAsync();
     }
 
     public async Task<Decreto> AdicionarDecreto(Decreto decreto)
     {
-        var query = @"INSERT INTO ""Decretos"" 
-                (""NumeroDecreto"", ""Solicitante"", ""DataSolicitacao"", ""DataParaUso"", ""Secretaria"", ""Justificativa"", ""UsuarioId"") 
-              VALUES
-                (@NumeroDecreto, @Solicitante, @DataSolicitacao, @DataParaUso, @Secretaria::text::secretaria_enum, @Justificativa, @UsuarioId)
-              RETURNING *;";
+        _context.Decretos.Add(decreto);
+        await _context.SaveChangesAsync();
 
-        using (var connection = _connection.CreateConnection())
-        {
-            return await connection.QuerySingleAsync<Decreto>(query, new
-            {
-                decreto.NumeroDecreto,
-                decreto.Solicitante,
-                decreto.DataSolicitacao,
-                decreto.DataParaUso,
-                Secretaria = decreto.Secretaria.ToString(),
-                decreto.Justificativa,
-                decreto.UsuarioId
-            });
-        }
+        return decreto;
     }
 
-    public async Task<Decreto> EditarDecreto(Decreto decreto, int id)
+    public async Task<Decreto> EditarDecreto(Decreto decreto)
     {
-        var query = @"UPDATE ""Decretos"" SET 
-            ""NumeroDecreto"" = @NumeroDecreto, 
-            ""Solicitante"" = @Solicitante, 
-            ""DataSolicitacao"" = @DataSolicitacao, 
-            ""DataParaUso"" = @DataParaUso, 
-            ""Secretaria"" = @Secretaria::text::secretaria_enum, 
-            ""Justificativa"" = @Justificativa, 
-            ""UsuarioId"" = @UsuarioId  
-            WHERE ""Id"" = @Id RETURNING *"; 
+        _context.Decretos.Update(decreto);
+        await _context.SaveChangesAsync();
 
-        using var connection = _connection.CreateConnection();
-    
-        return await connection.QuerySingleAsync<Decreto>(query, new
-        {
-            decreto.NumeroDecreto,
-            decreto.Solicitante,
-            decreto.DataSolicitacao,
-            decreto.DataParaUso,
-            Secretaria = decreto.Secretaria.ToString(),
-            decreto.Justificativa,
-        });
+        return decreto;
     }
 }

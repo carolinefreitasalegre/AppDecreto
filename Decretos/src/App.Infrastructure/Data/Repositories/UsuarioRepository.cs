@@ -1,86 +1,52 @@
 using App.Application.Interfaces.Repository;
 using App.Domain;
-using Dapper;
+using App.Infrastructure.Data.DbConnection;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Infrastructure.Data.Repositories;
 
 public class UsuarioRepository : IUsuarioRepository
 {
-    private readonly DbConnectionFactory _dbConnectionFactory;
+    private readonly AppDbContext _context;
 
-    public UsuarioRepository(DbConnectionFactory dbConnectionFactory)
+    public UsuarioRepository(AppDbContext context)
     {
-        _dbConnectionFactory = dbConnectionFactory;
+        _context = context;
     }
 
-    public async Task<Usuario> BuscarViaEmail(string email)
+    public async Task<Usuario?> BuscarViaEmail(string email)
     {
-        var query = @"SELECT * FROM ""Usuarios"" WHERE ""Email"" = @email";
-
-        using (var connection = _dbConnectionFactory.CreateConnection())
-        {
-            return await connection.QueryFirstOrDefaultAsync<Usuario>(query, new {email});
-        }
+       return await _context.Usuarios.FirstOrDefaultAsync(e => e.Email == email);
     }
 
-    public async Task<Usuario> BuscarViaId(int id)
+    public async Task<Usuario?> BuscarViaId(int id)
     {
-        var query = @"SELECT * FROM ""Usuarios"" WHERE ""Id"" = @id";
-
-        using (var connection = _dbConnectionFactory.CreateConnection())
-        {
-            return await connection.QueryFirstOrDefaultAsync<Usuario>(query, new { id });
-        }
+        return await _context.Usuarios.FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<Usuario> BuscarViaMatricula(int matricula)
+    public async Task<Usuario?> BuscarViaMatricula(int matricula)
     {
-        var query = @"SELECT * FROM ""Usuarios"" WHERE ""Matricula"" = @matricula";
-        using (var connection = _dbConnectionFactory.CreateConnection())
-        {
-            return await connection.QueryFirstOrDefaultAsync<Usuario>(query, new { matricula });
-        }
+        return await _context.Usuarios.FirstOrDefaultAsync(e => e.Matricula == matricula);
     }
 
     public async Task<List<Usuario>> ListarUsuarios()
     {
-        var query = @"SELECT * FROM ""Usuarios""";
-        using (var connection = _dbConnectionFactory.CreateConnection())
-        {
-            var usuarios = await connection.QueryAsync<Usuario>(query);
-            return usuarios.ToList();
-        }
+        return await _context.Usuarios.ToListAsync();
     }
 
     public async Task<Usuario> AdicionarUsuario(Usuario usuario)
     {
-        var query = @"INSERT INTO ""Usuarios"" (""Matricula"" , ""Nome"", ""Email"", ""Senha"", ""Role"", ""Status"", ""CriadoEm"") 
-                        VALUES(@Matricula , @Nome, @Email, @Senha, @Role, @Status, @CriadoEm)
-                        RETURNING *;";
+        _context.Usuarios.Add(usuario);
+        await _context.SaveChangesAsync();
 
-        using (var connection = _dbConnectionFactory.CreateConnection())
-        {
-           return await connection.QuerySingleAsync<Usuario>(query, new
-           {
-               usuario.Matricula,
-               usuario.Nome,
-               usuario.Email,
-               usuario.Senha,
-               usuario.Role,
-               usuario.Status
-           });
-        }
+        return usuario;
     }
 
     public async Task<Usuario> EditarUsuario(Usuario usuario)
     {
-        var id = usuario.Id;
-        var query = @"UPDATE ""Usuarios"" SET ""Matricula""=@Matricula, ""Nome""=@Nome, ""Email""=@Email, ""Senha""=@Senha, 
-                        ""Role""=@Role, ""Status""=@Status
-                    WHERE ""Id"" = @id";
-        
-        using var connection = _dbConnectionFactory.CreateConnection();
+        _context.Usuarios.Update(usuario);
+        await _context.SaveChangesAsync();
 
-        return await connection.QueryFirstOrDefaultAsync<Usuario>(query, usuario);
+        return usuario;
     }
 }
