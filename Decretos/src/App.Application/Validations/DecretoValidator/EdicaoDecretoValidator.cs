@@ -10,16 +10,6 @@ public class EdicaoDecretoValidator: AbstractValidator<AtualizarDecretoDto>
     public EdicaoDecretoValidator(IDecretoRepository repository)
     {
         _repository = repository;
-        
-        RuleFor(d => d.NumeroDecreto)
-            .GreaterThan(0)
-            .WithMessage("Número do decreto é obrigatório.")
-            .MustAsync(async (numero, cancellation) =>
-            {
-                var ultimoNumero = await repository.BuscarUltimoDecreto();
-                return numero == ultimoNumero + 1;
-            })
-            .WithMessage("Número do decreto deve seguir a sequência correta.");
 
         RuleFor(d => d.Solicitante)
             .NotEmpty()

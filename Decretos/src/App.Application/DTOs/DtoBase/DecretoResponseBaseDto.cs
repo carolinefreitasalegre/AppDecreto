@@ -2,8 +2,9 @@ using App.Domain.Enums;
 
 namespace App.Application.DTOs;
 
-public abstract class DecretoBaseDto
+public abstract class DecretoResponseBaseDto
 {
+    public int NumeroDecreto { get; set; }
     public string Solicitante { get; set; } = null!;
     public DateTime DataSolicitacao { get; set; }
     public DateTime DataParaUso { get; set; }

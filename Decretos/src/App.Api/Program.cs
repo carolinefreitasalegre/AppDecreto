@@ -36,10 +36,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(dataSource)
 );
 
-builder.Services.AddScoped<DbConnectionFactory>();
-
-
-
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IDecretoRepository, DecretoRepository>();
 builder.Services.AddScoped<IDecretoRepository, DecretoRepository>();
@@ -53,32 +49,7 @@ builder.Services.AddScoped<IValidator<AtualizarUsuarioDto>, AtualizarUsuarioVali
 builder.Services.AddScoped<IValidator<CriarDecretoDto>, DecretoValidator>();
 builder.Services.AddScoped<IValidator<AtualizarDecretoDto>, EdicaoDecretoValidator>();
 
-builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddRouting(opt => opt.LowercaseUrls = true); 
-
-
-
-//autenticacao
-builder.Services.AddAuthentication(opt =>
-{
-    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(opt =>
-{
-    opt.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
-        RoleClaimType = ClaimTypes.Role,
-        NameClaimType = ClaimTypes.Name
-    };
-});
 
 var app = builder.Build();
 

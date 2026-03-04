@@ -54,7 +54,6 @@ public class DecretoService : IDecretoService
             throw new BusinessException(validator.Errors.First().ErrorMessage);
 
         var novoDecreto = new Decreto(
-            dto.NumeroDecreto,
             dto.Solicitante,
             dto.DataParaUso,
             dto.Secretaria,
@@ -78,7 +77,6 @@ public class DecretoService : IDecretoService
         if (!validator.IsValid)
             throw new BusinessException(validator.Errors.First().ErrorMessage);
         
-        buscarDecreto.AlterarNumero(decreto.NumeroDecreto);
         buscarDecreto.AlterarSolicitante(decreto.Solicitante);
         buscarDecreto.AlterarDataParaUso(decreto.DataParaUso);
         buscarDecreto.AlterarSecretaria(decreto.Secretaria);
