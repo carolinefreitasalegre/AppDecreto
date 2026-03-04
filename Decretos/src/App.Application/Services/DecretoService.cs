@@ -54,7 +54,6 @@ public class DecretoService : IDecretoService
             throw new BusinessException(validator.Errors.First().ErrorMessage);
 
         var novoDecreto = new Decreto(
-            dto.NumeroDecreto,
             dto.Solicitante,
             dto.DataParaUso,
             dto.Secretaria,
@@ -73,18 +72,11 @@ public class DecretoService : IDecretoService
         if (buscarDecreto == null)
             throw new NotFoundException("Decreto não encontrado.");
 
-        // if (buscarDecreto.NumeroDecreto != decreto.NumeroDecreto)
-        // {
-        //     var decretoJaExiste = await _repository.BuscarViaNumero(decreto.NumeroDecreto);
-        //     if (decretoJaExiste != null)
-        //         throw new BusinessException("Decreto já cadastrado.");
-        // }
-        var validator = await _validatorEdicaoDecreto.ValidateAsync(decreto);
+       var validator = await _validatorEdicaoDecreto.ValidateAsync(decreto);
 
         if (!validator.IsValid)
             throw new BusinessException(validator.Errors.First().ErrorMessage);
         
-        buscarDecreto.AlterarNumero(decreto.NumeroDecreto);
         buscarDecreto.AlterarSolicitante(decreto.Solicitante);
         buscarDecreto.AlterarDataParaUso(decreto.DataParaUso);
         buscarDecreto.AlterarSecretaria(decreto.Secretaria);

@@ -16,24 +16,23 @@ public class Decreto
         public Usuario Usuario { get; private set; } = null!;
         public int UsuarioId { get; private set; }
 
+        
         public Decreto()
         {
         }
 
-        public Decreto( int numeroDecreto,
+        public Decreto( 
                 string solicitante,
                 DateTime dataParaUso,
                 Secretaria secretaria,
                 string justificativa,
                 int usuarioId)
         {
-                ValidarNumero(numeroDecreto);
                 ValidarSolicitante(solicitante);
                 ValidarDatas(dataParaUso);
                 ValidarJustificativa(justificativa);
                 ValidarUsuario(usuarioId);
 
-                NumeroDecreto = numeroDecreto;
                 Solicitante = solicitante;
                 DataSolicitacao = DateTime.UtcNow;
                 DataParaUso = dataParaUso;
@@ -54,12 +53,6 @@ public class Decreto
                 Justificativa = justificativa;
         }
         
-        public void AlterarNumero(int novoNumero)
-        {
-                ValidarNumero(novoNumero);
-                NumeroDecreto = novoNumero;
-        }
-
         public void AlterarSolicitante(string novoSolicitante)
         {
                 ValidarSolicitante(novoSolicitante);
@@ -72,12 +65,6 @@ public class Decreto
         }
 
         
-        private static void ValidarNumero(int numero)
-        {
-                if (numero <= 0)
-                        throw new DomainException("Número do decreto inválido.");
-        }
-
         private static void ValidarSolicitante(string solicitante)
         {
                 if (string.IsNullOrWhiteSpace(solicitante))
