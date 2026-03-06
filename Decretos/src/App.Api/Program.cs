@@ -42,12 +42,12 @@ builder.Services.AddScoped<IDecretoRepository, DecretoRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IDecretoService, DecretoService>();
 
-builder.Services.AddScoped<IHashSenhaService, HashSenhaService>();
+builder.Services.AddTransient<IHashSenhaService, HashSenhaService>();
 
-builder.Services.AddScoped<IValidator<CriarUsuarioDto>, UsuarioValidator>();
-builder.Services.AddScoped<IValidator<AtualizarUsuarioDto>, AtualizarUsuarioValidator>();
-builder.Services.AddScoped<IValidator<CriarDecretoDto>, DecretoValidator>();
-builder.Services.AddScoped<IValidator<AtualizarDecretoDto>, EdicaoDecretoValidator>();
+builder.Services.AddTransient<IValidator<CriarUsuarioDto>, UsuarioValidator>();
+builder.Services.AddTransient<IValidator<AtualizarUsuarioDto>, AtualizarUsuarioValidator>();
+builder.Services.AddTransient<IValidator<CriarDecretoDto>, DecretoValidator>();
+builder.Services.AddTransient<IValidator<AtualizarDecretoDto>, EdicaoDecretoValidator>();
 
 builder.Services.AddRouting(opt => opt.LowercaseUrls = true); 
 

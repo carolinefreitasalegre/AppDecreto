@@ -23,7 +23,7 @@ public class ExceptionMiddleware
         catch (Exception ex)
         {
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            context.Response.ContentType = "application/jsno";
+            context.Response.ContentType = "application/json";
 
             var response = new
             {

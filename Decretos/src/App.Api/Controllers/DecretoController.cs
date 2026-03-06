@@ -43,11 +43,11 @@ namespace App.Api.Controllers
             return Created("", novoDecreto);
         }
 
-        [HttpPut("atualizar-decreto/{id}")]
-        public async Task<ActionResult<DecretosDto>> EditarDecreto(AtualizarDecretoDto dto, int id)
+        [HttpPut("atualizar-decreto/{numeroDecreto}")]
+        public async Task<ActionResult<DecretosDto>> EditarDecreto(AtualizarDecretoDto dto,  int numeroDecreto)
         {
-            var decretoEditado = await _service.EditarDecreto(dto);
-            return Created("", decretoEditado);
+            var decretoEditado = await _service.EditarDecreto(numeroDecreto, dto);
+            return NoContent();
         }
 
        

@@ -6,4 +6,19 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Exceptions\ResourceMessagesExceptions.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RessourceMessagesExceptions.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Exceptions\ResourceMessagesExceptions.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ResourceMessagesExceptions.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

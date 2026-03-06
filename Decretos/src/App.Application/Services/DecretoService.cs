@@ -66,9 +66,9 @@ public class DecretoService : IDecretoService
         return DecretoMapper.ParaDecretosDto(novo);
     }
 
-    public async Task<DecretosDto> EditarDecreto(AtualizarDecretoDto decreto)
+    public async Task<DecretosDto> EditarDecreto(int numeroDecreto, AtualizarDecretoDto decreto)
     {
-        var buscarDecreto = await _repository.BuscarViaId(decreto.Id);
+        var buscarDecreto = await _repository.BuscarViaNumero(numeroDecreto);
         if (buscarDecreto == null)
             throw new NotFoundException("Decreto não encontrado.");
 

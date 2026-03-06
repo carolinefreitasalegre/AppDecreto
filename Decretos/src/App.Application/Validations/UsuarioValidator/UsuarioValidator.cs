@@ -25,6 +25,7 @@ public class UsuarioValidator : AbstractValidator<CriarUsuarioDto>
         RuleFor(u => u.Nome)
             .NotEmpty()
             .WithMessage("Nome é obrigatório.")
+            // .WithMessage(ResourceMessagesExceptions)
             .MinimumLength(3)
             .WithMessage("Nome deve ter pelo menos 3 caracteres.");
 
