@@ -1,5 +1,4 @@
 using App.Domain.Enums;
-using App.Domain.Exceptions;
 
 namespace App.Domain;
 
@@ -68,24 +67,24 @@ public class Decreto
         private static void ValidarSolicitante(string solicitante)
         {
                 if (string.IsNullOrWhiteSpace(solicitante))
-                        throw new DomainException("Solicitante é obrigatório.");
+                        throw new Exception("Solicitante é obrigatório.");
         }
 
         private static void ValidarDatas(DateTime dataParaUso)
         {
                 if (dataParaUso.Date < DateTime.UtcNow.Date)
-                        throw new DomainException("Data para uso não pode ser no passado.");
+                        throw new Exception("Data para uso não pode ser no passado.");
         }
 
         private static void ValidarJustificativa(string justificativa)
         {
                 if (string.IsNullOrWhiteSpace(justificativa))
-                        throw new DomainException("Justificativa é obrigatória.");
+                        throw new Exception("Justificativa é obrigatória.");
         }
 
         private static void ValidarUsuario(int usuarioId)
         {
                 if (usuarioId <= 0)
-                        throw new DomainException("Usuário inválido.");
+                        throw new Exception("Usuário inválido.");
         }
 }

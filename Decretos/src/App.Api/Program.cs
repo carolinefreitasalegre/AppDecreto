@@ -1,5 +1,3 @@
-using System.Security.Claims;
-using System.Text;
 using App.Application;
 using App.Application.Interfaces;
 using App.Application.Interfaces.Repository;
@@ -7,14 +5,10 @@ using App.Application.Middlewares;
 using App.Application.Services;
 using App.Application.Validations;
 using App.Domain.Enums;
-using App.Infrastructure;
-using App.Infrastructure.Data;
 using App.Infrastructure.Data.DbConnection;
 using App.Infrastructure.Data.Repositories;
 using FluentValidation;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +47,7 @@ builder.Services.AddRouting(opt => opt.LowercaseUrls = true);
 
 var app = builder.Build();
 
+app.UseMiddleware<CultureMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())

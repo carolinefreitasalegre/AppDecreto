@@ -1,4 +1,5 @@
 using App.Application.Interfaces.Repository;
+using Exceptions.Exceptions;
 using FluentValidation;
 
 namespace App.Application.Validations;
@@ -13,21 +14,21 @@ public class EdicaoDecretoValidator: AbstractValidator<AtualizarDecretoDto>
 
         RuleFor(d => d.Solicitante)
             .NotEmpty()
-            .WithMessage("Solicitante é obrigatório.")
+            .WithMessage(ResourceMessagesExceptions.DECRETO_SOLICITANTE_EMPTY)
             .MinimumLength(5)
-            .WithMessage("Solicitante deve ter no mínimo 5 caracteres.");
+            .WithMessage(ResourceMessagesExceptions.DECRETO_SOLICITANTE_MIN_CHARACTER);
 
         RuleFor(d => d.DataParaUso)
             .GreaterThanOrEqualTo(DateTime.Today)
-            .WithMessage("Data para uso não pode ser anterior a hoje.");
+            .WithMessage(ResourceMessagesExceptions.DECRETO_DATA_INVALID);
 
         RuleFor(d => d.Secretaria)
             .IsInEnum()
-            .WithMessage("Secretaria inválida.");
+            .WithMessage(ResourceMessagesExceptions.DECRETO_SECRETARIA_INVALID);
 
         RuleFor(d => d.Justificativa)
             .NotEmpty()
-            .WithMessage("Justificativa é obrigatória.");
+            .WithMessage(ResourceMessagesExceptions.DECRETO_JUSTIFICATIVA_EMPTY);
     }
 
 }

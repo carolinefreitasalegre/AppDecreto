@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
 using App.Domain.Enums;
-using App.Domain.Exceptions;
 
 namespace App.Domain;
 
@@ -79,7 +78,7 @@ public class Usuario
     {
         if (matricula <= 0)
         {
-            throw new DomainException("Matrícula inválida");
+            throw new Exception("Matrícula inválida");
         }
     }
 
@@ -87,19 +86,19 @@ public class Usuario
     {
         if (string.IsNullOrWhiteSpace(nome))
         {
-            throw new DomainException("Nome é obrigatório.");
+            throw new Exception("Nome é obrigatório.");
         }
     }
 
     private static void ValidarEmail(string email)
     {
         if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
-            throw new DomainException("Email inválido.");
+            throw new Exception("Email inválido.");
     }
 
     private static void ValidarSenha(string senha)
     {
         if (string.IsNullOrWhiteSpace(senha) || senha.Length < 6)
-            throw new DomainException("Senha deve ter ao menos 6 caracteres.");
+            throw new Exception("Senha deve ter ao menos 6 caracteres.");
     }
 }

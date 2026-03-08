@@ -120,10 +120,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NAME_EMPTY" xml:space="preserve">
-    <value>Campo nome não pode estar em branco.</value>
+  <data name="DECRETO_DATA_INVALID" xml:space="preserve">
+    <value>Usage date cannot be earlier than today.</value>
   </data>
-  <data name="S" xml:space="preserve">
-        <value />
-    </data>
+  <data name="DECRETO_JUSTIFICATIVA_EMPTY" xml:space="preserve">
+    <value>Justification is required.</value>
+  </data>
+  <data name="DECRETO_SECRETARIA_INVALID" xml:space="preserve">
+    <value>Invalid secretariat.</value>
+  </data>
+  <data name="DECRETO_SOLICITANTE_EMPTY" xml:space="preserve">
+    <value>Applicant is required.</value>
+  </data>
+  <data name="DECRETO_SOLICITANTE_MIN_CHARACTER" xml:space="preserve">
+    <value>Applicant must be at least 5 characters long.</value>
+  </data>
+  <data name="EMAIL_CADASTRADO" xml:space="preserve">
+    <value>Email is already registered.</value>
+  </data>
+  <data name="EMAIL_EMPTY" xml:space="preserve">
+    <value>Email field is required.</value>
+  </data>
+  <data name="EMAIL_INVALID" xml:space="preserve">
+    <value>Please enter a valid email address.</value>
+  </data>
+  <data name="INVALID_ROLE" xml:space="preserve">
+    <value>Invalid role.</value>
+  </data>
+  <data name="INVALID_STATUS" xml:space="preserve">
+    <value>Invalid status.</value>
+  </data>
+  <data name="MINIMAL_REGISTRATION_CHARACTER" xml:space="preserve">
+    <value>Registration number must contain at least 6 (six) characters.</value>
+  </data>
+  <data name="MINIMUM_CHARACTER" xml:space="preserve">
+    <value>Name must be at least 3 characters long.</value>
+  </data>
+  <data name="NAME_EMPTY" xml:space="preserve">
+    <value>Name field is required.</value>
+  </data>
+  <data name="PASS_CHARACTER_ESPETIAL" xml:space="preserve">
+    <value>Password must contain letters and numbers.</value>
+  </data>
+  <data name="PASS_EMPTY" xml:space="preserve">
+    <value>Password field is required.</value>
+  </data>
+  <data name="PASS_MINIMAL_CHARACTER" xml:space="preserve">
+    <value>Password must be at least 6 characters long.</value>
+  </data>
+  <data name="REGISTRATION_ALREADY_REGISTERED" xml:space="preserve">
+    <value>Registration number is already registered.</value>
+  </data>
+  <data name="SPECIAL_CHARACTER_PASS" xml:space="preserve">
+    <value>Password must contain letters and numbers.</value>
+  </data>
 </root>
