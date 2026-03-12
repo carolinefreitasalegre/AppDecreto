@@ -7,9 +7,12 @@ using App.Application.Validations;
 using App.Domain.Enums;
 using App.Infrastructure.Data.DbConnection;
 using App.Infrastructure.Data.Repositories;
+using App.Infrastructure.Messaging;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Worker.Notificacoes.Interfaces;
+using Worker.Notificacoes.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -37,13 +40,16 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IDecretoService, DecretoService>();
 
 builder.Services.AddTransient<IHashSenhaService, HashSenhaService>();
+builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
 
 builder.Services.AddTransient<IValidator<CriarUsuarioDto>, UsuarioValidator>();
 builder.Services.AddTransient<IValidator<AtualizarUsuarioDto>, AtualizarUsuarioValidator>();
 builder.Services.AddTransient<IValidator<CriarDecretoDto>, DecretoValidator>();
 builder.Services.AddTransient<IValidator<AtualizarDecretoDto>, EdicaoDecretoValidator>();
 
+
 builder.Services.AddRouting(opt => opt.LowercaseUrls = true); 
+
 
 var app = builder.Build();
 

@@ -14,12 +14,23 @@ public class CultureMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        var requestCulture = context.Request.Headers["Accept-Language"].FirstOrDefault();
-       
-            CultureInfo.CurrentCulture = new CultureInfo(requestCulture);
-            CultureInfo.CurrentUICulture = new CultureInfo(requestCulture);
-        
+        var cultureHeader = context.Request.Headers["Accept-Language"].ToString();
 
-            await _next(context);
+        var culture = cultureHeader?
+            .Split(',')
+            .FirstOrDefault()?
+            .Split(';')  
+            .FirstOrDefault()?
+            .Trim();
+
+        if (string.IsNullOrWhiteSpace(culture))
+            culture = "pt-BR";
+
+        var cultureInfo = new CultureInfo(culture);
+
+        CultureInfo.CurrentCulture = cultureInfo;
+        CultureInfo.CurrentUICulture = cultureInfo;
+
+        await _next(context);
     }
 }

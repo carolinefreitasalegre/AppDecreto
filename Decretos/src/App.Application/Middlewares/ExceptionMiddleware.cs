@@ -1,6 +1,5 @@
 using System.Net;
 using System.Text.Json;
-using App.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 
 namespace App.Application.Middlewares;

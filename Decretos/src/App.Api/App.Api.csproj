@@ -13,6 +13,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.0" />
@@ -20,6 +21,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\App.Infrastructure\App.Infrastructure.csproj" />
+        <ProjectReference Include="..\Worker.Notificacoes\Worker.Notificacoes.csproj" />
     </ItemGroup>
 
 </Project>

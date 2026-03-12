@@ -1,8 +1,10 @@
+using App.Application.Events;
 using App.Application.Interfaces;
 using App.Application.Interfaces.Repository;
 using App.Application.Mappers;
 using App.Domain;
 using App.Domain.Exceptions;
+using App.Infrastructure.Messaging;
 using FluentValidation;
 
 namespace App.Application.Services;
@@ -10,15 +12,18 @@ namespace App.Application.Services;
 public class DecretoService : IDecretoService
 {
     private readonly IDecretoRepository _repository;
+    private readonly IRabbitMqService _rabbitMqService;
     private readonly IValidator<CriarDecretoDto> _validatorCriacaoDecreto;
     private readonly IValidator<AtualizarDecretoDto> _validatorEdicaoDecreto;
 
 
-    public DecretoService(IDecretoRepository repository, IValidator<CriarDecretoDto> validatorCriacaoDecreto, IValidator<AtualizarDecretoDto> validatorEdicaoDecreto)
+    public DecretoService(IDecretoRepository repository, IValidator<CriarDecretoDto> validatorCriacaoDecreto, 
+        IValidator<AtualizarDecretoDto> validatorEdicaoDecreto, IRabbitMqService rabbitMqService)
     {
         _repository = repository;
         _validatorCriacaoDecreto = validatorCriacaoDecreto;
         _validatorEdicaoDecreto = validatorEdicaoDecreto;
+        _rabbitMqService = rabbitMqService;
     }
     
     public async Task<DecretosDto> BuscarViaNumero(int numero)
@@ -61,6 +66,16 @@ public class DecretoService : IDecretoService
             dto.UsuarioId  
         );
 
+        await _rabbitMqService.PublicarAsync(
+            new DecretoCriadoEvent
+            {
+                //NumeroDecreto = dto.NumeroDecreto,
+                Solicitante = dto.Solicitante,
+                DataParaUso = dto.DataParaUso
+            },
+            "decreto-criado"
+            
+        );
         var novo = await _repository.AdicionarDecreto(novoDecreto);
 
         return DecretoMapper.ParaDecretosDto(novo);
