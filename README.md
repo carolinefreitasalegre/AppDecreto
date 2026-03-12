@@ -4,17 +4,17 @@ O AppDecreto nasceu ao identificar a dificuldade no gerenciamento de solicitaç�
 
 O processo era totalmente manual: os pedidos eram anotados à mão e posteriormente enviados para um grupo de WhatsApp para controle. Esse método, além de pouco organizado, abria margem para problemas como:
 
-🔁 Números duplicados
+- Números duplicados
 
-🔢 Quebra da sequência numérica
+- Quebra da sequência numérica
 
-❌ Esquecimento de registros
+- Esquecimento de registros
 
-📉 Falta de rastreabilidade...
+- Falta de rastreabilidade...
 
 Diante desse cenário, desenvolvi uma solução simples e eficiente para modernizar e automatizar esse controle.
 
-🎯 Objetivo
+## Objetivo
 
 Criar um sistema que:
 
@@ -30,19 +30,19 @@ Criar um sistema que:
 
 O sistema assegura a integridade da numeração de forma automática, tornando o processo mais seguro e confiável.
 
-🏗️ Arquitetura
+## Arquitetura
 
 O projeto está sendo desenvolvido seguindo boas práticas de engenharia de software:
 
-✅ Clean Architecture
+- Clean Architecture
 
-✅ Princípios SOLID
+- Princípios SOLID
 
-✅ Programação Orientada a Objetos (POO)
+- Programação Orientada a Objetos (POO)
 
-✅ Separação de responsabilidades
+- Separação de responsabilidades
 
-✅ Código limpo e organizado
+- Código limpo e organizado
 
 A estrutura está dividida em camadas:
 
@@ -54,7 +54,7 @@ Infrastructure → Acesso a dados e implementações externas
 
 API → Camada de exposição dos endpoints
 
-🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 .NET
 
@@ -66,9 +66,9 @@ REST API
 
 O banco de dados utilizado é o PostgreSQL, e o acesso aos dados é feito com Dapper, priorizando performance e controle direto sobre as queries.
 
-🚧 Status do Projeto
+- Status do Projeto
 
-🔨 Em desenvolvimento
+- Em desenvolvimento
 
 Próximos passos:
 
@@ -84,6 +84,6 @@ Melhorar validações e tratamento de erros
 
 Criar interface front-end
 
-💡 Motivação
+## Motivação
 
 Além de resolver um problema real, o projeto também faz parte do meu processo de evolução como desenvolvedora, aplicando na prática conceitos como arquitetura limpa, boas práticas e organização de código.
