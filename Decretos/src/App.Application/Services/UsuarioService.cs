@@ -2,7 +2,6 @@ using App.Application.Interfaces;
 using App.Application.Interfaces.Repository;
 using App.Application.Mappers;
 using App.Domain;
-using App.Domain.Exceptions;
 using FluentValidation;
 
 namespace App.Application.Services;
@@ -27,7 +26,7 @@ public class UsuarioService : IUsuarioService
     {
         var usuario = await _repository.BuscarViaEmail(email);
         if(usuario == null)
-            throw new NotFoundException("Usuáio não encontrado.");
+            throw new Exception("Usuáio não encontrado.");
 
         return UsuarioMapper.ParaUsuarioDto(usuario);
     }
@@ -36,7 +35,7 @@ public class UsuarioService : IUsuarioService
     {
         var usuario = await _repository.BuscarViaId(id);
         if (usuario == null)
-            throw new NotFoundException("Usuáio não encontrado.");
+            throw new Exception("Usuáio não encontrado.");
 
         return UsuarioMapper.ParaUsuarioDto(usuario);
     }
@@ -45,7 +44,7 @@ public class UsuarioService : IUsuarioService
     {
         var usuario = await _repository.BuscarViaMatricula(matricula);
         if(usuario == null)
-            throw new NotFoundException("Usuáio não encontrado.");
+            throw new Exception("Usuáio não encontrado.");
 
         return UsuarioMapper.ParaUsuarioDto(usuario);
     }
@@ -61,7 +60,7 @@ public class UsuarioService : IUsuarioService
     {
         var validator = await _validatorCriacaoUser.ValidateAsync(dto);
         if (!validator.IsValid)
-            throw new BusinessException(validator.Errors.First().ErrorMessage);
+            throw new Exception(validator.Errors.First().ErrorMessage);
      
         var senhaHash = _hashService.GerarHash(dto.Senha);
 
@@ -80,11 +79,11 @@ public class UsuarioService : IUsuarioService
     {
         var usuario = await _repository.BuscarViaId(dto.Id);
         if (usuario == null)
-            throw new NotFoundException("Usuário não encontrado.");
+            throw new Exception("Usuário não encontrado.");
 
         var validator = await _validatorEdicaoUser.ValidateAsync(dto);
         if (!validator.IsValid)
-            throw new BusinessException(validator.Errors.First().ErrorMessage);
+            throw new Exception(validator.Errors.First().ErrorMessage);
         
         usuario.AlterarNome(dto.Nome);
         usuario.AlterarEmail(dto.Email);
@@ -102,7 +101,7 @@ public class UsuarioService : IUsuarioService
     {
         var usuario = await _repository.BuscarViaId(id);
         if (usuario == null)
-            throw new NotFoundException("Usuário não encontrado.");
+            throw new Exception("Usuário não encontrado.");
 
         var senhaHash = _hashService.GerarHash(senha);
         usuario.AlterarSenha(senhaHash);

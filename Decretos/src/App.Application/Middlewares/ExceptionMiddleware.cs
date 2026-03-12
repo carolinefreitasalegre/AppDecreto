@@ -1,6 +1,5 @@
 using System.Net;
 using System.Text.Json;
-using App.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 
 namespace App.Application.Middlewares;
@@ -23,7 +22,7 @@ public class ExceptionMiddleware
         catch (Exception ex)
         {
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            context.Response.ContentType = "application/jsno";
+            context.Response.ContentType = "application/json";
 
             var response = new
             {
