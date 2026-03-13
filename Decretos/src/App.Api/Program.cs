@@ -1,3 +1,4 @@
+using System.Text;
 using App.Application;
 using App.Application.Interfaces;
 using App.Application.Interfaces.Repository;
@@ -9,15 +10,46 @@ using App.Infrastructure.Data.DbConnection;
 using App.Infrastructure.Data.Repositories;
 using App.Infrastructure.Messaging;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Npgsql;
-using Worker.Notificacoes.Interfaces;
-using Worker.Notificacoes.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var jwtKey = builder.Configuration["Jwt:Key"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        In = ParameterLocation.Header,
+        Description = "Insira o Token"
+    });
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(
     builder.Configuration.GetConnectionString("DefaultConnection")
@@ -38,9 +70,33 @@ builder.Services.AddScoped<IDecretoRepository, DecretoRepository>();
 builder.Services.AddScoped<IDecretoRepository, DecretoRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IDecretoService, DecretoService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 
 builder.Services.AddTransient<IHashSenhaService, HashSenhaService>();
 builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
+
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
+            
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
+
+            ValidateLifetime = true,
+            
+            ValidateIssuerSigningKey = true,
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+
+
 
 builder.Services.AddTransient<IValidator<CriarUsuarioDto>, UsuarioValidator>();
 builder.Services.AddTransient<IValidator<AtualizarUsuarioDto>, AtualizarUsuarioValidator>();
@@ -63,6 +119,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
+
+app.UseAuthentication();
 
 app.UseAuthentication();
 
