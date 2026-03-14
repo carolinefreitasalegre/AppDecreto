@@ -26,7 +26,7 @@ public class UsuarioService : IUsuarioService
     {
         var usuario = await _repository.BuscarViaEmail(email);
         if(usuario == null)
-            throw new Exception("Usuáio não encontrado.");
+            throw new Exception("Usuário não encontrado.");
 
         return UsuarioMapper.ParaUsuarioDto(usuario);
     }

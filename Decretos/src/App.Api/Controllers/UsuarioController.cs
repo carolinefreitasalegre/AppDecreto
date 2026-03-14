@@ -1,9 +1,11 @@
 using App.Application;
 using App.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Api.Controllers
 {
+    [Authorize(Roles = "GESTOR")]
     [Route("/[controller]")]
     [ApiController]
     public class UsuarioController : ControllerBase

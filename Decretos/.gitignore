@@ -8,7 +8,7 @@ publish/
 *.dll
 *.exe
 *.pdb
-
+*.DotSettings.user
 ######################################
 # Visual Studio
 ######################################
@@ -81,3 +81,4 @@ docker-compose.override.yml
 # Publish profiles
 ######################################
 Properties/PublishProfiles/
+
