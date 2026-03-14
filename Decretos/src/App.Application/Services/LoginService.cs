@@ -20,10 +20,13 @@ public class LoginService : ILoginService
 
     public async Task<TokenDto>Login(LoginDto dto)
     {
-        var usuario = await _repository.BuscarViaEmail(dto.Email) ??
+        var usuario = await _repository.BuscarViaEmail(dto.Email);
+
+        if(usuario == null)
             throw new BusinessException("Email ou senha inválidos.");
 
         var senhaValida = _hashSenha.Verificar(dto.Senha, usuario.Senha);
+
         if(!senhaValida)
             throw new BusinessException("Email ou senha inválidos.");
         

@@ -20,9 +20,9 @@ public class JwtService : IJwtService
     public TokenDto GerarToken(Usuario usuario)
     {
         var key = _config["Jwt:Key"]!;
-        var issuer = _config["JwtIssuer"]!;
+        var issuer = _config["Jwt:Issuer"]!;
         var audience = _config["Jwt:Audience"]!;
-        var expireInHours = int.Parse(_config["Jwt:ExpireInHours"]!);
+        var expireInHours = int.Parse(_config["Jwt:ExpiresInHours"]!);
         
         var claims = new List<Claim>
         {
