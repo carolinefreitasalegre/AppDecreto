@@ -4,7 +4,7 @@ using Bogus;
 
 namespace CammonTestsUtilies.Request;
 
-public class RequestRegisterUserJsonBuilder
+public class CriarUsuarioJsonBuilder
 {
     public static CriarUsuarioDto Build()
     {

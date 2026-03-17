@@ -22,16 +22,12 @@ public class UsuarioValidatorTest
         
         var validator = new UsuarioValidator(repositoryMock.Object);
         
-        var request = RequestRegisterUserJsonBuilder.Build();
+        var request = CriarUsuarioJsonBuilder.Build();
 
         var result = await validator.ValidateAsync(request);
 
         Assert.True(result.IsValid);
         
-        foreach (var error in result.Errors)
-        {
-            Console.WriteLine($"{error.PropertyName}: {error.ErrorMessage}");
-        }
     }
     
 }

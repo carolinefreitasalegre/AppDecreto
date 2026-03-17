@@ -6,12 +6,9 @@ namespace App.Application.Validations;
 
 public class DecretoValidator : AbstractValidator<CriarDecretoDto>
 {        
-    private readonly IDecretoRepository _repository;
 
-    public DecretoValidator(IDecretoRepository repository)
+    public DecretoValidator()
     {
-        _repository = repository;
-        
         RuleFor(d => d.Solicitante)
             .NotEmpty()
             .WithMessage(ResourceMessagesExceptions.DECRETO_SOLICITANTE_EMPTY)
