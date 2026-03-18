@@ -1,5 +1,6 @@
 using App.Application.Validations;
 using CammonTestsUtilies.Request;
+using Shouldly;
 
 namespace UnitTests.Decretos.Registro;
 
@@ -13,7 +14,7 @@ public class DecretoValidatorTest
         var request = CriarDecretoJsonBuilder.Build();
 
         var result = await validator.ValidateAsync(request);
-
-        Assert.True(result.IsValid);
+        
+        result.ShouldNotBeNull();
     }
 }

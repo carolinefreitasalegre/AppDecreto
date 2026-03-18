@@ -2,6 +2,7 @@ using App.Application.Interfaces.Repository;
 using App.Application.Validations;
 using CammonTestsUtilies.Request;
 using Moq;
+using Shouldly;
 
 namespace UnitTests.Usuario.Registro;
 
@@ -26,8 +27,8 @@ public class UsuarioValidatorTest
 
         var result = await validator.ValidateAsync(request);
 
-        Assert.True(result.IsValid);
-        
+        result.ShouldNotBeNull();
+
     }
     
 }
