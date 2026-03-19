@@ -1,89 +1,123 @@
-## AppDecreto
+# 🏛️ Sistema de Gestão de Decretos
 
-O AppDecreto nasceu ao identificar a dificuldade no gerenciamento de solicitações de números de decretos no setor onde meu esposo trabalha.
+Aplicação backend para gerenciamento, consulta e organização de decretos, com foco em controle administrativo, rastreabilidade e padronização de dados.
 
-O processo era totalmente manual: os pedidos eram anotados à mão e posteriormente enviados para um grupo de WhatsApp para controle. Esse método, além de pouco organizado, abria margem para problemas como:
+---
 
-- Números duplicados
+##  Problema
 
-- Quebra da sequência numérica
+A gestão de decretos em órgãos públicos pode se tornar complexa devido a:
 
-- Esquecimento de registros
+* Grande volume de documentos
+* Dificuldade de localizar decretos específicos
+* Falta de padronização nos cadastros
+* Risco de inconsistência em informações importantes
 
-- Falta de rastreabilidade...
+Sem um sistema estruturado, o controle se torna manual, sujeito a erros e difícil de escalar.
 
-Diante desse cenário, desenvolvi uma solução simples e eficiente para modernizar e automatizar esse controle.
+---
 
-## Objetivo
+##  Solução
 
-Criar um sistema que:
+Este projeto propõe uma API para gerenciamento de decretos, permitindo:
 
-- Permita o registro das solicitações de decretos
+* Cadastro estruturado de decretos
+* Consulta por número, data e outros critérios
+* Atualização segura de informações (mantendo regras de negócio)
+* Organização centralizada dos dados
 
-- Garanta que os números não sejam duplicados
+A aplicação simula um cenário real de uso em ambientes administrativos.
 
-- Mantenha a sequência numérica correta
+---
 
-- Centralize e organize os registros
+##  Arquitetura
 
-- Reduza erros humanos
+A aplicação segue boas práticas de desenvolvimento backend:
 
-O sistema assegura a integridade da numeração de forma automática, tornando o processo mais seguro e confiável.
+*  **Controller** → Responsável pelas requisições HTTP
+*  **Service** → Regras de negócio
+*  **Repository** → Acesso a dados
+*  **DTOs** → Transporte de dados entre camadas
 
-## Arquitetura
+Esse modelo garante:
 
-O projeto está sendo desenvolvido seguindo boas práticas de engenharia de software:
+* Separação de responsabilidades
+* Facilidade de manutenção
+* Escalabilidade
 
-- Clean Architecture
+---
 
-- Princípios SOLID
+##  Tecnologias utilizadas
 
-- Programação Orientada a Objetos (POO)
+* C# / .NET
+* Entity Framework
+* PostgreSQL
 
-- Separação de responsabilidades
+---
 
-- Código limpo e organizado
+##  Regras de negócio implementadas
 
-A estrutura está dividida em camadas:
+* O número do decreto não pode ser alterado após criação
+* Validação de dados obrigatórios
+* Estrutura preparada para consultas eficientes
 
-Domain → Entidades e regras de negócio
+---
 
-Application → Casos de uso e contratos
+##  Funcionalidades
 
-Infrastructure → Acesso a dados e implementações externas
+*  Cadastro de decretos
+*  Atualização de informações (com restrições)
+*  Consulta por critérios específicos
+*  Organização estruturada dos dados
+*  Operações CRUD
 
-API → Camada de exposição dos endpoints
+---
 
-## Tecnologias Utilizadas
+##  Possíveis melhorias (roadmap)
 
-.NET
+Para evolução do sistema:
 
-PostgreSQL
+* Autenticação com JWT
+* Controle de acesso por perfil (admin/usuário)
+* Versionamento de decretos
+* Logs de alterações
+* Paginação e filtros avançados
+* Upload de documentos (PDF dos decretos)
+* Testes automatizados
 
-Dapper
+---
 
-REST API
+##  Como rodar o projeto
 
-O banco de dados utilizado é o PostgreSQL, e o acesso aos dados é feito com Dapper, priorizando performance e controle direto sobre as queries.
+```bash
+git clone https://github.com/carolinefreitasalegre/AppDecreto
+cd AppDecreto
 
-- Status do Projeto
+# configurar connection string no appsettings
+dotnet restore
+dotnet run
+```
 
-- Em desenvolvimento
+---
 
-Próximos passos:
+##  Demonstração
 
-Corrigir alguns bugs
+*(adicione prints ou Swagger aqui — MUITO importante)*
 
-Implementar autenticação de usuários
+---
 
-Criar controle de permissões
+##  Diferenciais do projeto
 
-Adicionar logs de auditoria
+Este projeto se destaca por:
 
-Melhorar validações e tratamento de erros
+* Foco em um problema real (gestão administrativa)
+* Implementação de regras de negócio específicas
+* Estrutura backend organizada e escalável
+* Uso de boas práticas com .NET
 
-Criar interface front-end
+---
 
-## Motivação
+##  Autora
 
-Além de resolver um problema real, o projeto também faz parte do meu processo de evolução como desenvolvedora, aplicando na prática conceitos como arquitetura limpa, boas práticas e organização de código.
+Caroline Freitas
+https://github.com/carolinefreitasalegre
