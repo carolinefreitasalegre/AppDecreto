@@ -102,7 +102,6 @@ dotnet run
 
 ##  Demonstração
 
-// (adicione prints ou Swagger aqui — MUITO importante)*
 
 ---
 
