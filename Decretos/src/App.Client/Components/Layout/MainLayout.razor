@@ -1,0 +1,21 @@
+﻿@inherits LayoutComponentBase
+
+<RadzenComponents />
+
+<RadzenLayout>
+    <Radzeneader>
+        <RadzenText TextStyle="TextStyle.H6">Decretos</RadzenText>
+    </Radzeneader>
+
+    <RadzenSidbar>
+        <RadzenPanelMenu>
+            <RadzenPanelMenu Text="Início" Icon="home" Path="/inicio" />
+            <RadzenPanelMenu Text="Decretos" Icon="description" Path="/decretos" />
+            <RadzenPanelMenu Text="Administrador" Icon="manage_accounts" Path="/administrador" />
+        </RadzenPanelMenu>
+    </RadzenSidbar>
+
+    <RadzenBody>
+        @Body
+    </RadzenBody>
+</RadzenLayout>

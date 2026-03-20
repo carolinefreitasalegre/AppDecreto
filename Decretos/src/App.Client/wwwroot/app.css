@@ -1,0 +1,15 @@
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;  
+}
+:root {
+    --rz-primary-light: #e8f0fe; /* apenas para o IDE reconhecer */
+}
