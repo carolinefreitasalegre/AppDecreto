@@ -102,6 +102,9 @@ dotnet run
 
 ##  Demonstração
 
+<img width="1903" height="857" alt="imagem01Swagger" src="https://github.com/user-attachments/assets/c7f15c64-f364-4ad5-b6e2-c98070eb15f7" />
+<img width="1920" height="857" alt="imagem02Swagger" src="https://github.com/user-attachments/assets/be3e6549-4f06-4a50-9d90-48a4c36cdc4a" />
+<img width="1433" height="966" alt="imagem03Swagger" src="https://github.com/user-attachments/assets/2c473dfa-4fd3-4d65-8cff-0bc3f33dc0c6" />
 
 ---
 
