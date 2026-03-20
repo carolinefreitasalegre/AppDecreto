@@ -18,10 +18,11 @@ namespace App.Api.Controllers
         }
 
         [HttpGet("lista-decretos")]
-        public async Task<ActionResult<List<DecretosDto>>> Decretos()
+        public async Task<ActionResult> Decretos(int page = 1, int pageSize = 10)
         {
-            var decretos = await _service.ListarDecretos();
-            return Ok(decretos);
+            var (decretos, total) = await _service.ListarDecretos(page, pageSize);
+
+            return Ok(new { data = decretos, total, page, pageSize });
         }
 
         [HttpGet("buscar-decreto/{decreto}")]

@@ -44,11 +44,11 @@ public class DecretoService : IDecretoService
         return DecretoMapper.ParaDecretosDto(decreto);
     }
 
-    public async Task<List<DecretosDto>> ListarDecretos()
+    public async Task<(List<DecretosDto>, int)> ListarDecretos(int page, int pageSize)
     {
-        var decretos = await _repository.ListarDecretos();
+        var (decretos, total) = await _repository.ListarDecretos(page, pageSize);
 
-        return DecretoMapper.ParaListadecretosDto(decretos);
+        return (DecretoMapper.ParaListadecretosDto(decretos), total);
     }
 
     public async Task<DecretosDto> AdicionarDecretos(CriarDecretoDto dto)
