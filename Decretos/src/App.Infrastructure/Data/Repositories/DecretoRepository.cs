@@ -31,10 +31,17 @@ public class DecretoRepository : IDecretoRepository
         return await _context.Decretos.FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<List<Decreto>> ListarDecretos()
+    public async Task<(List<Decreto>, int)> ListarDecretos(int page, int pageSize)
     {
-        return await _context.Decretos
-            .Include(d => d.Usuario).ToListAsync();
+        var total = await _context.Decretos.CountAsync();
+
+        var dados = await _context.Decretos
+            .Include(d => d.Usuario)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (dados, total);
     }
 
     public async Task<Decreto> AdicionarDecreto(Decreto decreto)
