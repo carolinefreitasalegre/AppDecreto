@@ -1,30 +1,33 @@
 using App.Application.Events;
+using MassTransit;
 using Worker.Notificacoes.Interfaces;
 
 namespace Worker.Notificacoes.Consumers;
 
-public class DecretoCriadoConsumer
+public class DecretoCriadoConsumer : IConsumer<DecretoCriadoEvent>
 {
-    private readonly IEmailService _emailService;
-    private readonly IWhatsappService _whatsappService;
+    private readonly IEmailService _service;
+    private readonly ILogger<DecretoCriadoConsumer> _logger;
 
-    public DecretoCriadoConsumer(
-        IEmailService emailService,
-        IWhatsappService whatsappService)
+    public DecretoCriadoConsumer(IEmailService service,ILogger<DecretoCriadoConsumer> logger)
     {
-        _emailService = emailService;
-        _whatsappService = whatsappService;
+        _service = service;
+        _logger = logger;
     }
-
-    public async Task ProcessarAsync(DecretoCriadoEvent evento)
+    
+    public async Task Consume(ConsumeContext<DecretoCriadoEvent> context)
     {
-        var mensagem = $"Novo decreto criado: {evento.NumeroDecreto}";
+        var evento = context.Message;
+        _logger.LogInformation("Decreto recebido: {Numero}", evento.NumeroDecreto);
 
-        await _emailService.EnviarEmailAsync(
-            "Novo decreto publicado",
-            mensagem
-        );
+        var destinatarios = new[] { "freitascaroline.92@gmail.com" };
         
-        await _whatsappService.EnviarWhatsAsync(mensagem);
+        foreach(var email in destinatarios)
+        {
+            await _service.EnviarEmailAsync(
+                email,
+                $"Novo Decreto Solicitado: nº {evento.NumeroDecreto}",
+                $"O Decreto nº <strong>{evento.NumeroDecreto}</strong> foi solicitado com data para uso de: <strong>{evento.DataParaUso:dd/MM/yyyy}</strong>");
+        }
     }
 }
