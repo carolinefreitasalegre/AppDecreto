@@ -10,6 +10,7 @@ using App.Infrastructure.Data.DbConnection;
 using App.Infrastructure.Data.Repositories;
 using App.Infrastructure.Messaging;
 using FluentValidation;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -73,7 +74,6 @@ builder.Services.AddScoped<IDecretoService, DecretoService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 
 builder.Services.AddTransient<IHashSenhaService, HashSenhaService>();
-builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -96,16 +96,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
-
 builder.Services.AddTransient<IValidator<CriarUsuarioDto>, UsuarioValidator>();
 builder.Services.AddTransient<IValidator<AtualizarUsuarioDto>, AtualizarUsuarioValidator>();
 builder.Services.AddTransient<IValidator<CriarDecretoDto>, DecretoValidator>();
 builder.Services.AddTransient<IValidator<AtualizarDecretoDto>, EdicaoDecretoValidator>();
 
 
-builder.Services.AddRouting(opt => opt.LowercaseUrls = true); 
+builder.Services.AddRouting(opt => opt.LowercaseUrls = true);
 
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:Username"]);
+            h.Password(builder.Configuration["RabbitMQ:Password"]);
+        });
+    });
+});
 
 var app = builder.Build();
 

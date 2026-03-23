@@ -13,6 +13,8 @@ public class AppDbContext : DbContext
 
     public DbSet<Usuario> Usuarios { get; set; } = null!;
     public DbSet<Decreto> Decretos { get; set; } = null!;
+    
+    public DbSet<HistoricoDecreto> HistoricoDecreto { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

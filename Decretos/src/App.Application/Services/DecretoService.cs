@@ -6,24 +6,25 @@ using App.Domain;
 using App.Domain.Exceptions;
 using App.Infrastructure.Messaging;
 using FluentValidation;
+using MassTransit;
 
 namespace App.Application.Services;
 
 public class DecretoService : IDecretoService
 {
     private readonly IDecretoRepository _repository;
-    private readonly IRabbitMqService _rabbitMqService;
+    private readonly IPublishEndpoint _publish; 
     private readonly IValidator<CriarDecretoDto> _validatorCriacaoDecreto;
     private readonly IValidator<AtualizarDecretoDto> _validatorEdicaoDecreto;
 
 
     public DecretoService(IDecretoRepository repository, IValidator<CriarDecretoDto> validatorCriacaoDecreto, 
-        IValidator<AtualizarDecretoDto> validatorEdicaoDecreto, IRabbitMqService rabbitMqService)
+        IValidator<AtualizarDecretoDto> validatorEdicaoDecreto, IPublishEndpoint publish )
     {
         _repository = repository;
         _validatorCriacaoDecreto = validatorCriacaoDecreto;
-        _validatorEdicaoDecreto = validatorEdicaoDecreto;
-        _rabbitMqService = rabbitMqService;
+        _validatorEdicaoDecreto = validatorEdicaoDecreto; 
+        _publish = publish; 
     }
     
     public async Task<DecretosDto> BuscarViaNumero(int numero)
@@ -65,20 +66,19 @@ public class DecretoService : IDecretoService
             dto.Justificativa,
             dto.UsuarioId  
         );
-
-        await _rabbitMqService.PublicarAsync(
-            new DecretoCriadoEvent
-            {
-                //NumeroDecreto = dto.NumeroDecreto,
-                Solicitante = dto.Solicitante,
-                DataParaUso = dto.DataParaUso
-            },
-            "decreto-criado"
-            
-        );
+        
         var novo = await _repository.AdicionarDecreto(novoDecreto);
 
-        return DecretoMapper.ParaDecretosDto(novo);
+        var decretoDto = DecretoMapper.ParaDecretosDto(novo);
+        //caso e erro aqui!!
+        await _publish.Publish(
+            new DecretoCriadoEvent
+            {
+                NumeroDecreto = decretoDto.NumeroDecreto,
+                Solicitante = decretoDto.Solicitante,
+                DataParaUso = decretoDto.DataParaUso
+            });
+        return decretoDto;
     }
 
     public async Task<DecretosDto> EditarDecreto(int numeroDecreto, AtualizarDecretoDto decreto)

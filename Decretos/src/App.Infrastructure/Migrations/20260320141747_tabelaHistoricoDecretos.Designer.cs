@@ -3,6 +3,7 @@ using System;
 using App.Infrastructure.Data.DbConnection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace App.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260320141747_tabelaHistoricoDecretos")]
+    partial class tabelaHistoricoDecretos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,42 +71,6 @@ namespace App.Infrastructure.Migrations
                     b.ToTable("Decretos");
                 });
 
-            modelBuilder.Entity("App.Domain.HistoricoDecreto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CampoAlterado")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("DataAlteracao")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("DecretoId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ValorAnterior")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ValorNovo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("HistoricoDecreto");
-                });
-
             modelBuilder.Entity("App.Domain.Usuario", b =>
                 {
                     b.Property<int>("Id")
@@ -145,17 +112,6 @@ namespace App.Infrastructure.Migrations
                 {
                     b.HasOne("App.Domain.Usuario", "Usuario")
                         .WithMany("Decretos")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("App.Domain.HistoricoDecreto", b =>
-                {
-                    b.HasOne("App.Domain.Usuario", "Usuario")
-                        .WithMany()
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
